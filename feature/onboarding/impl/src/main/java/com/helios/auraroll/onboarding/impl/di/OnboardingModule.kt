@@ -1,13 +1,11 @@
 package com.helios.auraroll.onboarding.impl.di
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.helios.auraroll.common.EntryProviderInstaller
 import com.helios.auraroll.common.Navigator
 import com.helios.auraroll.onboarding.api.navigation.Onboarding
+import com.helios.auraroll.onboarding.impl.ui.OnboardingRoute
+import com.helios.auraroll.onboarding.impl.ui.OnboardingViewModel
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,12 +21,12 @@ object OnboardingModule {
     fun provideEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller =
         {
             entry<Onboarding>(content = {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Onboarding Screen")
-                }
+                val viewModel = hiltViewModel<OnboardingViewModel>()
+                val permissionRevoked = it.permissionRevoked
+                OnboardingRoute(
+                    viewModel = viewModel,
+                    permissionRevoked = permissionRevoked
+                )
             })
         }
 }

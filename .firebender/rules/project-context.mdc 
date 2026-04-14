@@ -1,0 +1,92 @@
+# AuraRoll — Product Requirements Document
+
+> **Note:** This app was originally scoped under the codename "Prism." All references to "Prism" map to "AuraRoll."
+
+---
+
+## 1. Executive Summary
+
+AuraRoll is a localized Android gallery utility that reorganizes a user's entire photo library based on dominant color usage. Unlike standard galleries that sort by date (chronological), AuraRoll sorts by **Hue**, allowing users to explore their life through a color spectrum. The core interaction is a fluid, high-performance slider that instantly filters the photo grid to match the selected color, creating a satisfying and aesthetic browsing experience.
+
+---
+
+## 2. The Problem & Solution
+
+### The Problem
+Modern camera rolls are cluttered dumping grounds. Users have thousands of photos, and "search" requires knowing exactly what you are looking for (e.g., "dog," "beach"). There is no way to browse by "vibe" or aesthetic without manual tagging.
+
+### The Solution
+An automated visual indexer that scans the library, extracts the dominant hue of every image, and maps it to a **0–360° color wheel**, allowing for instant, fluid discovery.
+
+---
+
+## 3. Unique Selling Points (USPs)
+
+- **The "Fluid" Slider (The Hook):** Most apps are static. AuraRoll is alive. Dragging the slider doesn't just cut to a new page; it morphs the grid in real-time. It feels like a fidget spinner for your memories — extremely satisfying to use.
+
+- **Rediscovery Engine:** Users will find photos they forgot about. Searching for "Green" might reveal a hiking trip from 3 years ago next to a salad they ate yesterday. It connects memories by feeling, not time.
+
+- **Privacy First:** Zero cloud processing. All analysis happens on-device using Android's local APIs. No data ever leaves the phone.
+
+- **Designer's Companion:** Perfect for artists, designers, and Instagram influencers who need to curate a "mood board" or find reference images with a specific color palette.
+
+---
+
+## 4. Target Audience
+
+- **The "Aesthetic" Gen Z:** Users who curate their Instagram grids based on color themes.
+- **Designers/Creatives:** Professionals who use their camera roll as a "reference library."
+- **Nostalgia Seekers:** Users with 10,000+ photos who want a fun way to kill time browsing old memories.
+
+---
+
+## 5. Product Requirements (Functional)
+
+### A. Onboarding (The Scan)
+
+- **Permission:** Request `READ_MEDIA_IMAGES` permission.
+- **The Indexer:** Upon first launch, the app must scan the local photo library.
+- **UX Requirement:** Show a progress bar (e.g., *"Extracting colors from 2,304 memories..."*).
+- **Background Behavior:** If the user exits, the scan must continue via a **WorkManager** job so the app is ready when they return.
+
+### B. Main View (The Spectrum)
+
+- **The Grid:** A standard 3 or 4-column grid of image thumbnails.
+- **The Slider:** A horizontal slider at the bottom of the screen.
+  - **Visuals:** The track of the slider should look like a rainbow gradient (Spectrum).
+  - **Thumb:** A circular thumb that shows the currently selected color.
+- **Interaction:**
+  - As the thumb drags, the Grid updates immediately.
+  - **Logic:** If the slider is at "Blue" (Hue ~240), show images with a dominant Hue between 220 and 260.
+
+### C. Detail View
+
+- **Transition:** Tapping an image opens it fullscreen with a **Shared Element Transition** (smooth zoom).
+- **Metadata:** Below the image, show the extracted color palette (Dominant, Muted, Vibrant swatches) with Hex codes. This is a "Pro" feature for designers.
+
+---
+
+## 6. Technical Specifications
+
+### A. Color Theory Logic
+
+- **Color Space:** The app must convert colors to **HSV** (Hue, Saturation, Value). RGB must not be used for sorting.
+- **Sorting Logic:** The slider controls the Hue (H) value (0° to 360°).
+- **Filtering:**
+  - **Black/White/Monochrome Logic:** Images with very low Saturation (`S < 0.1`) or very low Value (`V < 0.1`) must be **excluded** from the color slider and placed in a separate "Monochrome" toggle. This prevents a gray wall appearing in the "Red" section (Red is 0° and Gray often defaults to 0° hue).
+
+### B. Performance Constraints (Non-Functional)
+
+- **60 FPS Scroll:** The slider must not drop frames. Database queries must be near-instant.
+- **Database:** Use **Room** (SQLite). The `hue` column must be indexed.
+- **Image Loading:** Use **Coil** or **Glide**. Pre-load thumbnails aggressively.
+
+---
+
+## 7. Architecture Notes (Android)
+
+- **Local-only:** No network calls, no cloud sync, no accounts.
+- **WorkManager:** Used for background indexing after the initial onboarding scan.
+- **Room + indexed `hue` column:** Enables instant range queries for slider filtering.
+- **Shared Element Transitions:** Required for the Grid → Detail navigation.
+- **Privacy:** All color extraction and storage is fully on-device.

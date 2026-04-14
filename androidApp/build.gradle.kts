@@ -47,6 +47,9 @@ dependencies {
     implementation(projects.feature.onboarding.api)
     implementation(projects.feature.onboarding.impl)
 
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
+
     // AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

@@ -1,3 +1,5 @@
 package com.helios.auraroll.onboarding.api.navigation
 
-object Onboarding
+data class Onboarding(
+    val permissionRevoked: Boolean = false
+)

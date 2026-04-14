@@ -33,6 +33,7 @@ android {
 
 dependencies {
     implementation(projects.common)
+    implementation(projects.shared)
     implementation(projects.core.designsystem)
     implementation(projects.feature.onboarding.api)
 
@@ -44,6 +45,14 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    // WorkManager
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.androidx.hilt.work)
+    ksp(libs.androidx.hilt.compiler)
+
+    // Room for Database access
+    implementation(libs.androidx.room.runtime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
