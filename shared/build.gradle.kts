@@ -1,17 +1,16 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.kotlin.multiplatform.library)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
+    androidLibrary {
+        namespace = "com.helios.auraroll.shared"
+        compileSdk = libs.versions.compileSdk.get().toInt()
+        minSdk = libs.versions.minSdk.get().toInt()
     }
-    
+
     listOf(
         iosArm64(),
         iosSimulatorArm64()
@@ -21,10 +20,14 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.androidx.room.runtime)
+        }
+        androidMain.dependencies {
+            implementation(libs.androidx.palette.ktx)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -32,14 +35,8 @@ kotlin {
     }
 }
 
-android {
-    namespace = "com.helios.auraroll.shared"
-    compileSdk = 36
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    defaultConfig {
-        minSdk = 28
-    }
+dependencies {
+    add("kspAndroid", libs.androidx.room.compiler)
+    add("kspIosSimulatorArm64", libs.androidx.room.compiler)
+    add("kspIosArm64", libs.androidx.room.compiler)
 }

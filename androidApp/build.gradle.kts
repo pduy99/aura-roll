@@ -4,18 +4,17 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.kotlin.android)
 }
 
 
 android {
     namespace = "com.helios.auraroll.android"
-    compileSdk = 36
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.helios.auraroll.android"
-        minSdk = 28
-        targetSdk = 36
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.compileSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
 
@@ -35,11 +34,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
-        }
-    }
     buildFeatures {
         compose = true
     }
@@ -47,9 +41,14 @@ android {
 
 dependencies {
     implementation(projects.shared)
+    implementation(projects.common)
+    implementation(projects.core.designsystem)
 
     implementation(projects.feature.onboarding.api)
     implementation(projects.feature.onboarding.impl)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     // AndroidX
     implementation(libs.androidx.core.ktx)

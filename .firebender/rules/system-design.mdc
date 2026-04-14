@@ -1,0 +1,117 @@
+# Design System: High-End Editorial Gallery Experience
+
+## 1. Overview & Creative North Star: "The Living Curator"
+
+This design system is built to transform a standard utility into a high-end digital sanctuary. Our Creative North Star is **"The Living Curator"** — a philosophy where the UI serves as a silent, sophisticated backdrop that breathes with the content.
+
+We move beyond the "grid-of-squares" template by using intentional asymmetry, generous negative space, and tonal layering. The experience should feel like walking through a private, dimly lit gallery where light only falls where it is invited. We prioritize fluidity over rigidity; transitions should feel organic, and the interface should feel "alive" through subtle glassmorphism and depth.
+
+---
+
+## 2. Color & Tonal Architecture
+
+The palette is engineered to disappear. By using deep, neutral bases, we ensure that the user's photography provides the primary "pigment" of the experience.
+
+### The Neutral Core
+
+| Token | Hex | Usage |
+|---|---|---|
+| `background` | `#0e0e0e` | The canvas. True Black foundation for HDR photos. |
+| `surface-container-lowest` | `#000000` | Recessed areas, background depths |
+| `surface-container-low` | `#131313` | Main gallery backgrounds |
+| `surface-container` | `#1a1919` | Standard cards or nav bars |
+| `surface-container-highest` | `#262626` | Elevated overlays or floating menus |
+
+### The Accents
+
+| Token | Hex | Usage |
+|---|---|---|
+| `primary` | `#f9f9f9` | High-priority typography and essential icons |
+| `secondary` | `#ac89ff` | Interactive states, Spectrum Slider, moments of delight |
+| `tertiary` | `#81ecff` | Sparingly for secondary interactive highlights |
+
+### Core Visual Rules
+
+- **The "No-Line" Rule:** Explicitly prohibit 1px solid borders for sectioning. Boundaries must be defined solely through background token shifts (e.g., a `surface-container-high` card on a `surface-container-low` background).
+- **The "Glass & Gradient" Rule:** Use Glassmorphism for floating elements. Apply `surface-variant` with **60% opacity** and a **20px backdrop-blur**.
+- **Signature Textures:** Main CTAs should use a subtle linear gradient from `secondary` to `secondary_dim` to provide a "soulful" tactile feel.
+
+---
+
+## 3. Typography: Editorial Clarity
+
+We pair two sans-serifs to create a hierarchy that feels both functional and curated.
+
+### Typefaces
+
+- **Display & Headlines — Manrope:** Geometric precision, modern "tech-editorial" feel.
+  - `display-lg`: `3.5rem` — Empty states, "Memory" headers
+  - `headline-sm`: `1.5rem` — Album titles
+
+- **Body & Labels — Inter:** Maximum legibility at small scales.
+  - `body-md`: `0.875rem` — Metadata
+  - `label-sm`: `0.6875rem` — Technical photo data (ISO, Shutter speed)
+
+### Hierarchy Principle
+
+High contrast in **scale** is preferred over high contrast in **weight**. Large, light-weight headlines paired with small, crisp body text create a premium "magazine" aesthetic.
+
+---
+
+## 4. Elevation & Depth: Tonal Layering
+
+We reject the drop-shadows of the 2010s. Depth is achieved through **Physicality and Light.**
+
+- **The Layering Principle:** Place a `surface-container-highest` element over a `surface-dim` background to create a "natural lift."
+- **Ambient Shadows:** For floating modals use a "Shadow-Blur" approach: `box-shadow: 0 20px 40px rgba(0,0,0, 0.4)`. The shadow must feel like an occlusion of light, not a black smudge.
+- **The "Ghost Border":** If accessibility requires a boundary, use the `outline-variant` token at **15% opacity**. It should be felt, not seen.
+- **Glassmorphism:** Navigation bars and the Spectrum Slider must use backdrop filters to allow photo colors to bleed through, making the UI feel integrated with the content.
+
+---
+
+## 5. Components
+
+### The Spectrum Slider (Signature Component)
+
+A custom input for color-based filtering — the defining interaction of AuraRoll.
+
+- **Track:** A multi-stop gradient of the user's photo highlights or a standard vibrant spectrum (full 0–360° hue range).
+- **Thumb:** A fully rounded `primary` ring with a 2px `outline` of `surface`.
+- **Interaction:** On drag, the background `surface` should subtly tint toward the selected hue.
+
+### Buttons
+
+| Variant | Background | Text | Border |
+|---|---|---|---|
+| Primary | `surface-tint` | `on-primary` | None — `lg` (1rem) corner radius |
+| Secondary | None (Ghost) | `primary` | `outline-variant` at 20% opacity |
+| Tertiary | `surface-container-highest` | `secondary` | None |
+
+### Cards & Lists
+
+- **Grid Cards:** Zero borders. `lg` (1rem) corner radius.
+- **Editorial Spacing:** `xl` spacing (`1.5rem`) between images to allow them to "breathe."
+- **No Dividers:** Lists are separated by `8dp` of vertical space or a shift from `surface-container-low` to `surface-container-lowest`.
+
+### Input Fields
+
+- **Style:** Filled, not outlined. Base: `surface-container-high`.
+- **Focus State:** A 2px `secondary` bottom-border only, or a subtle glow using `surface-tint` at 10% opacity.
+
+---
+
+## 6. Do's and Don'ts
+
+### Do
+
+- **Do** embrace asymmetry. An 80/20 split in a photo detail view is more editorial than 50/50.
+- **Do** use fluid motion. When a photo opens, it should "grow" from its thumbnail position (Shared Element Transition), not just fade in.
+- **Do** use `secondary_fixed_dim` for subtle states; it provides color without being loud.
+- **Do** add more padding when in doubt. Space is the ultimate luxury.
+
+### Don't
+
+- **Don't** use pure white (`#FFFFFF`) for large text blocks; use `primary` (`#f9f9f9`) to reduce eye strain in Dark Mode.
+- **Don't** use 100% opaque separators. They "cut" the UI and destroy the Living Curator vibe.
+- **Don't** use standard Material drop-shadows. Keep them soft, wide, and tinted.
+- **Don't** crowd the photos. The content is the hero — the UI is the frame.
