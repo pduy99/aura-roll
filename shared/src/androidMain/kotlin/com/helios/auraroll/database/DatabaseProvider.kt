@@ -8,4 +8,4 @@ fun getDatabaseBuilder(context: Context): RoomDatabase.Builder<AuraRollDatabase>
     Room.databaseBuilder<AuraRollDatabase>(
         context = context.applicationContext,
         name = "auraroll.db"
-    )
+    ).fallbackToDestructiveMigration(dropAllTables = true)
