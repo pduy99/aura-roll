@@ -46,6 +46,8 @@ dependencies {
 
     implementation(projects.feature.onboarding.api)
     implementation(projects.feature.onboarding.impl)
+    implementation(projects.feature.home.api)
+    implementation(projects.feature.home.impl)
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)

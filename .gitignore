@@ -5,6 +5,7 @@
 .vscode
 .idea
 .kotlin
+.firebender/plans/
 build
 *.iml
 local.properties

@@ -3,6 +3,7 @@ package com.helios.auraroll.onboarding.impl.di
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.helios.auraroll.common.EntryProviderInstaller
 import com.helios.auraroll.common.Navigator
+import com.helios.auraroll.home.api.navigation.Home
 import com.helios.auraroll.onboarding.api.navigation.Onboarding
 import com.helios.auraroll.onboarding.impl.ui.OnboardingRoute
 import com.helios.auraroll.onboarding.impl.ui.OnboardingViewModel
@@ -25,7 +26,8 @@ object OnboardingModule {
                 val permissionRevoked = it.permissionRevoked
                 OnboardingRoute(
                     viewModel = viewModel,
-                    permissionRevoked = permissionRevoked
+                    permissionRevoked = permissionRevoked,
+                    navigateToHome = { navigator.popAndGoTo(Home) }
                 )
             })
         }

@@ -12,5 +12,7 @@ data class IndexedPhoto(
     val saturation: Float,
     val brightness: Float,          // HSV value
     val isMonochrome: Boolean,
-    val dominantColorArgb: Long     // packed ARGB for palette swatches
+    val dominantColorArgb: Long,    // packed ARGB for palette swatches
+    val aspectRatio: Float = 1f,    // width / height, used by the staggered grid
+    val colorDominance: Float = 0f  // 0–1; share of palette population covered by the winning swatch
 )

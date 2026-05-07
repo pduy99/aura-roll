@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.shared)
     implementation(projects.core.designsystem)
     implementation(projects.feature.onboarding.api)
+    implementation(projects.feature.home.api)
 
     implementation(libs.androidx.material.icons.extended)
 

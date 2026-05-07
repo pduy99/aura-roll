@@ -31,6 +31,8 @@ dependencyResolutionManagement {
 include(":shared")
 include(":feature:onboarding:api")
 include(":feature:onboarding:impl")
+include(":feature:home:api")
+include(":feature:home:impl")
 include(":core:designsystem")
 include(":androidApp")
 include(":common")
