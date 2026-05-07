@@ -1,7 +1,12 @@
 package com.helios.auraroll.onboarding.impl.ui
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +31,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -42,13 +51,15 @@ import com.helios.auraroll.core.designsystem.theme.AuraRollTheme
 import com.helios.auraroll.core.designsystem.theme.SecondaryFixed
 import com.helios.auraroll.core.designsystem.theme.SurfaceContainerLowest
 import com.helios.auraroll.core.designsystem.theme.TertiaryFixed
+import com.helios.auraroll.onboarding.IndexingTip
+import kotlinx.coroutines.delay
 import java.text.NumberFormat
 import java.util.Locale
 
 @Composable
 fun IndexingScreen(
     uiState: OnboardingUiState,
-    onNextClick: () -> Unit,
+    onEnterSpectrumClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val progressAnim by animateFloatAsState(
@@ -248,12 +259,57 @@ fun IndexingScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Next Button
-        AuraPrimaryButton(
-            text = "Next",
-            onClick = onNextClick,
-            variant = AuraButtonVariant.Purple,
-            enabled = uiState.indexingProgress >= 1f
+        // Rotating tips carousel
+        RotatingTip(tips = uiState.indexingTips)
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Enter the spectrum button, only shown once indexing is complete
+        AnimatedVisibility(visible = uiState.indexingProgress >= 1f) {
+            AuraPrimaryButton(
+                text = "ENTER THE SPECTRUM",
+                onClick = onEnterSpectrumClick,
+                variant = AuraButtonVariant.White
+            )
+        }
+    }
+}
+
+@Composable
+private fun RotatingTip(
+    tips: List<IndexingTip>,
+    modifier: Modifier = Modifier,
+    intervalMillis: Long = 5_000L
+) {
+    if (tips.isEmpty()) return
+
+    var index by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(tips) {
+        index = 0
+        while (tips.size > 1) {
+            delay(intervalMillis)
+            index = (index + 1) % tips.size
+        }
+    }
+
+    AnimatedContent(
+        targetState = index.coerceIn(0, tips.lastIndex),
+        transitionSpec = {
+            fadeIn(animationSpec = tween(durationMillis = 400)) togetherWith
+                fadeOut(animationSpec = tween(durationMillis = 400))
+        },
+        label = "rotatingTip",
+        modifier = modifier.fillMaxWidth()
+    ) { current ->
+        Text(
+            text = "Tip: ${tips[current].text}",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
         )
     }
 }
@@ -266,9 +322,13 @@ private fun IndexingScreenPreview() {
             uiState = OnboardingUiState(
                 indexingProgress = 0.74f,
                 indexingProcessedCount = 2304,
-                indexingPaletteColors = listOf(0xFFF5D6C6, 0xFF6B8E78, 0xFFA9C2F0, 0xFFF9F9F9)
+                indexingPaletteColors = listOf(0xFFF5D6C6, 0xFF6B8E78, 0xFFA9C2F0, 0xFFF9F9F9),
+                indexingTips = listOf(
+                    IndexingTip("Aura Roll indexes everything offline first."),
+                    IndexingTip("You can safely close the app; indexing continues in the background.")
+                )
             ),
-            onNextClick = {}
+            onEnterSpectrumClick = {}
         )
     }
 }
