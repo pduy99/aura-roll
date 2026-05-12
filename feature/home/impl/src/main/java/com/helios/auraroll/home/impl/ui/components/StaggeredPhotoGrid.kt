@@ -4,6 +4,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -23,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
@@ -46,7 +48,8 @@ fun StaggeredPhotoGrid(
     state: LazyStaggeredGridState = rememberLazyStaggeredGridState(),
     quoteInsertIndex: Int = -1,
     quoteContent: (@Composable () -> Unit)? = null,
-    headerContent: @Composable (() -> Unit)? = null
+    headerContent: @Composable (() -> Unit)? = null,
+    onPhotoClick: (Photo) -> Unit = {},
 ) {
     // Reorder photos so that columns are balanced before each full-line (landscape)
     // photo, eliminating the empty-lane gaps that a vertical staggered grid would
@@ -86,6 +89,7 @@ fun StaggeredPhotoGrid(
             item(key = photo.id, contentType = "photo", span = photoSpan) {
                 PhotoCard(
                     photo = photo,
+                    onClick = { onPhotoClick(photo) },
                     modifier = Modifier.animateItem(
                         fadeInSpec = tween(durationMillis = 350),
                         fadeOutSpec = tween(durationMillis = 250),
@@ -189,6 +193,7 @@ private fun arrangePhotosForStaggeredGrid(photos: List<Photo>): List<Photo> {
 @Composable
 private fun PhotoCard(
     photo: Photo,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val safeAspectRatio = if (photo.aspectRatio > 0f) photo.aspectRatio else 1f
@@ -198,12 +203,13 @@ private fun PhotoCard(
             .data(photo.uri)
             .crossfade(true)
             .build(),
-        contentDescription = null,
+        contentDescription = "Photo",
         contentScale = ContentScale.Crop,
         modifier = modifier
             .fillMaxWidth()
             .aspectRatio(safeAspectRatio)
             .clip(photoCornerRadius)
             .background(MaterialTheme.colorScheme.surfaceContainer)
+            .clickable(role = Role.Image, onClick = onClick)
     )
 }

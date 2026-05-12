@@ -20,6 +20,9 @@ interface IndexedPhotoDao {
     @Query("SELECT id FROM indexed_photos")
     suspend fun getAllIds(): List<Long>
 
+    @Query("SELECT * FROM indexed_photos WHERE id = :id LIMIT 1")
+    suspend fun findById(id: Long): IndexedPhoto?
+
     @Query("SELECT DISTINCT dominantColorArgb FROM indexed_photos WHERE isMonochrome = 0 ORDER BY id DESC LIMIT 5")
     fun sampleColors(): Flow<List<Long>>
 

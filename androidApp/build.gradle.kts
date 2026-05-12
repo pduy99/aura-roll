@@ -48,6 +48,8 @@ dependencies {
     implementation(projects.feature.onboarding.impl)
     implementation(projects.feature.home.api)
     implementation(projects.feature.home.impl)
+    implementation(projects.feature.detail.api)
+    implementation(projects.feature.detail.impl)
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)

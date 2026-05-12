@@ -2,7 +2,9 @@ package com.helios.auraroll.home.impl.di
 
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.helios.auraroll.common.EntryProviderInstaller
+import com.helios.auraroll.common.Navigator
 import com.helios.auraroll.data.repository.IndexedPhotoRepository
+import com.helios.auraroll.detail.api.navigation.Detail
 import com.helios.auraroll.domain.usecase.ObserveFilteredPhotosUseCase
 import com.helios.auraroll.domain.usecase.ObservePhotoCountUseCase
 import com.helios.auraroll.home.api.navigation.Home
@@ -24,11 +26,14 @@ object HomeModule {
 
     @IntoSet
     @Provides
-    fun provideEntryProviderInstaller(): EntryProviderInstaller =
+    fun provideEntryProviderInstaller(navigator: Navigator): EntryProviderInstaller =
         {
             entry<Home>(content = {
                 val viewModel = hiltViewModel<HomeViewModel>()
-                HomeRoute(viewModel = viewModel)
+                HomeRoute(
+                    viewModel = viewModel,
+                    onPhotoClick = { photoId -> navigator.goTo(Detail(photoId)) },
+                )
             })
         }
 }

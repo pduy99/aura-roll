@@ -50,6 +50,7 @@ import kotlinx.coroutines.launch
 fun HomeScreen(
     uiState: HomeUiState,
     onAction: (HomeAction) -> Unit,
+    onPhotoClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val hueColor = remember(uiState.selectedHue) { hueToColor(uiState.selectedHue) }
@@ -120,6 +121,7 @@ fun HomeScreen(
             photos = uiState.photos,
             state = gridState,
             modifier = Modifier.fillMaxSize(),
+            onPhotoClick = { photo -> onPhotoClick(photo.id) },
             quoteInsertIndex = uiState.quoteInsertIndex,
             quoteContent = uiState.quote?.let { quote ->
                 { QuoteCard(quote = quote, hueColor = hueColor) }
@@ -213,7 +215,8 @@ private fun HomeScreenPreview() {
                 hueLabel = "Oceanic Cyan",
                 photoCount = 124
             ),
-            onAction = {}
+            onAction = {},
+            onPhotoClick = {}
         )
     }
 }
