@@ -128,7 +128,7 @@ fun IndexingScreen(
                         )
                     )
                 )
-                .padding(32.dp)
+                .padding(24.dp)
         ) {
             Column(modifier = Modifier.fillMaxWidth()) {
                 // Badge
@@ -193,7 +193,7 @@ fun IndexingScreen(
                     Column {
                         Text(
                             text = "PROCESSED MEMORIES",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             letterSpacing = 1.sp
                         )
@@ -218,7 +218,7 @@ fun IndexingScreen(
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
                             text = "DETECTED PALETTES",
-                            style = MaterialTheme.typography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             letterSpacing = 1.sp
                         )

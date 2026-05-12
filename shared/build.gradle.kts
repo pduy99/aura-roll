@@ -28,6 +28,7 @@ kotlin {
         }
         androidMain.dependencies {
             implementation(libs.androidx.palette.ktx)
+            implementation(libs.androidx.exifinterface)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

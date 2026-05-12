@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.helios.auraroll.home.impl"
+    namespace = "com.helios.auraroll.detail.impl"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -35,7 +35,6 @@ dependencies {
     implementation(projects.common)
     implementation(projects.shared)
     implementation(projects.core.designsystem)
-    implementation(projects.feature.home.api)
     implementation(projects.feature.detail.api)
 
     implementation(libs.androidx.material.icons.extended)
@@ -46,6 +45,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
+
+    // Room — for direct DAO injection in the Android-side detail repository binding.
+    implementation(libs.androidx.room.runtime)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

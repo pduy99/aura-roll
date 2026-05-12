@@ -50,13 +50,12 @@ fun WelcomeScreen(
             .background(MaterialTheme.colorScheme.background)
             .systemBarsPadding()
             .padding(horizontal = 24.dp)
-            .padding(bottom = 32.dp),
+            .padding(vertical = 32.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HeroIllustration(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
         )
 
         val headline = buildAnnotatedString {
@@ -67,6 +66,8 @@ fun WelcomeScreen(
                 append("new light.")
             }
         }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Text(
             text = headline,
@@ -79,7 +80,7 @@ fun WelcomeScreen(
 
         PrivacyPill()
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.weight(1f))
 
         if (uiState.permissionPreviouslyRevoked) {
             Row(
@@ -163,7 +164,9 @@ private fun PrivacyPill(modifier: Modifier = Modifier) {
 private fun WelcomeScreenPreview() {
     AuraRollTheme {
         WelcomeScreen(
-            uiState = OnboardingUiState(),
+            uiState = OnboardingUiState(
+                permissionPreviouslyRevoked = true,
+            ),
             onGrantPermissionClick = {}
         )
     }
